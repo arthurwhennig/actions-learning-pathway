@@ -24,3 +24,35 @@ jobs:
           node-version: "18.x"
       - run: npm install
       - run: npm run test
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    steps:
+      - name: checkout repository code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: set up node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - name: configure github pages
+        uses: actions/configure-pages@v3
+        with:
+          static_site_generator: next
+      - run: npm install
+      - run: npm run build
+      - name: upload artifacts to github pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./out"
+      - name: deploy to github pages
+        id: deployment # identifier for the property on the 'steps' object
+        uses: actions/deploy-pages@v3
