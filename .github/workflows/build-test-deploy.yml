@@ -2,7 +2,7 @@ name: build-test-deploy
 on: push
 jobs:
   build:
-    runs-on: Ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: check out repository code
         uses: actions/checkout@v3
@@ -12,3 +12,15 @@ jobs:
           node-version: "18.x"
       - run: npm install
       - run: npm run build
+  test:
+    needs: build # requires the "build" job to have successfully finished before running the "test" job
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out repository code
+        uses: actions/checkout@v3
+      - name: set up node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - run: npm install
+      - run: npm run test
