@@ -3,5 +3,5 @@ let add = (a, b) => {
   if (c > 10) {
     return "far too much";
   }
-  return c;
+  return c + 0;
 };
