@@ -1,3 +1,1 @@
-function addTest() {
-  console.log("added test");
-}
+const test = "Hello World";
